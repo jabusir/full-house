@@ -8,8 +8,10 @@ const CardsContainer = styled.div`
   display: flex;
   width: 80%;
   justify-content: space-evenly;
+  margin: 0 auto;
   @media (max-width: 768px) {
     flex-direction: column;
+    align-items: center;
   }
 `;
 
@@ -19,15 +21,11 @@ function App() {
   const [cards, setCards] = useState([]);
   const [hand, setHand] = useState({});
   const [fullHouse, setFullHouse] = useState(false);
-  const [pile, setPile] = useState([]);
+  const [gameLoss, setGameLoss] = useState(false);
 
   useEffect(() => {
     if (deck === "") {
-      fetchDeck().then((res) => {
-        if (res.success) {
-          setDeck(res.deck_id);
-        }
-      });
+      getDeck();
     }
   }, []);
 
@@ -43,7 +41,6 @@ function App() {
     }
 
     const handObj = cards.reduce((acc, currCard) => {
-      console.log(acc);
       return {
         ...acc,
         [currCard.value]: acc[currCard.value] ? acc[currCard.value] + 1 : 1,
@@ -68,11 +65,22 @@ function App() {
     }
   }, [hand]);
 
+  const getDeck = () => {
+    fetchDeck().then((res) => {
+      if (res.success) {
+        setDeck(res.deck_id);
+      }
+    });
+  };
+
   const drawCards = (amount = 5) => {
     fetchCards(deck, amount).then((res) => {
       if (res.success) {
         setCards(cards.concat(res.cards));
         setCardCount(5);
+      }
+      if (res.remaining === 0) {
+        setGameLoss(true);
       }
     });
   };
@@ -84,21 +92,28 @@ function App() {
   };
 
   const deleteCard = (code) => {
-    setPile(pile.concat(cards.filter((card) => card.code === code)));
     setCards(cards.filter((card) => card.code !== code));
     setCardCount(cardCount - 1);
   };
 
+  const resetGame = () => {
+    getDeck();
+  };
+
   return (
-    <div style={{ height: "100vh", width: "100%" }}>
+    <div style={{ height: "100vh", width: "100%", backgroundColor: "#FAFAFA" }}>
       <Deck addCards={addCards} />
-      {!fullHouse && (
-        <CardsContainer>
-          {cards.map((card, i) => (
-            <Card key={i} deleteCard={deleteCard} data={card} />
-          ))}
-        </CardsContainer>
-      )}
+      <CardsContainer>
+        {cards.map((card, i) => (
+          <Card
+            key={i}
+            deleteCard={deleteCard}
+            data={card}
+            fullHouse={fullHouse}
+          />
+        ))}
+      </CardsContainer>
+      {gameLoss && <div onClick={resetGame}>You lose</div>}
     </div>
   );
 }

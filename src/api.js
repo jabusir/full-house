@@ -1,5 +1,5 @@
 export const fetchDeck = async () => {
-  const res = await fetch(`https://deckofcardsapi.com/api/deck/new/`);
+  const res = await fetch(`https://deckofcardsapi.com/api/deck/new/shuffle/`);
   const payload = await res.json();
   return payload;
 };

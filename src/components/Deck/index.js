@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 const StyledImage = styled.img`
   height: 300px;
+  margin: 20px;
 `;
 
 const Deck = ({ addCards }) => {

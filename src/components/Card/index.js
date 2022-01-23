@@ -5,10 +5,20 @@ const Container = styled.div`
   height: 400px;
 `;
 
-const Card = ({ data, deleteCard }) => {
+const StyledCard = styled.img`
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-radius: 15px;
+  max-height: ${(props) => (props.fullHouse ? "70%" : "auto")};
+`;
+
+const Card = ({ data, deleteCard, fullHouse }) => {
   return (
     <Container onClick={() => deleteCard(data.code)}>
-      <img src={data.image} alt={data.code} />
+      <StyledCard
+        fullHouse={fullHouse}
+        src={fullHouse ? `/bob.jpg` : data.image}
+        alt={data.code}
+      />
     </Container>
   );
 };
