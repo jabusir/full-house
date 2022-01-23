@@ -8,10 +8,37 @@ const CardsContainer = styled.div`
   display: flex;
   width: 80%;
   justify-content: space-evenly;
-  margin: 0 auto;
+  margin: 15px auto;
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: center;
+  }
+`;
+
+const Header = styled.div`
+  text-align: center;
+  width: 100%;
+  position: relative;
+  top: 5vh;
+  font-size: 24px;
+  color: grey;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+`;
+
+const Button = styled.button`
+  margin: 0 auto;
+`;
+
+const FullHouseImg = styled.img`
+  max-width: 100%;
+  margin-left: 10vw;
+  @media (max-width: 768px) {
+    margin: 0;
   }
 `;
 
@@ -97,12 +124,18 @@ function App() {
   };
 
   const resetGame = () => {
+    setFullHouse(false);
+    setGameLoss(false);
+    setCardCount(0);
+    setHand({});
     getDeck();
   };
 
   return (
     <div style={{ height: "100vh", width: "100%", backgroundColor: "#FAFAFA" }}>
+      {gameLoss && <Header>You lost</Header>}
       <Deck addCards={addCards} />
+      {fullHouse && <FullHouseImg src="/fullhouse.svg" />}
       <CardsContainer>
         {cards.map((card, i) => (
           <Card
@@ -113,7 +146,11 @@ function App() {
           />
         ))}
       </CardsContainer>
-      {gameLoss && <div onClick={resetGame}>You lose</div>}
+      {gameLoss && (
+        <ButtonContainer>
+          <Button onClick={resetGame}>Run it Back</Button>
+        </ButtonContainer>
+      )}
     </div>
   );
 }
