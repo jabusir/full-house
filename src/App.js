@@ -42,14 +42,13 @@ function App() {
       drawCards();
     }
 
-    let handObj = {};
-    cards.forEach((card) => {
-      let timesSeen = handObj[card.value];
-      if (timesSeen) {
-        handObj[card.value] = timesSeen + 1;
-      }
-      handObj[card.value] = 1;
-    });
+    const handObj = cards.reduce((acc, currCard) => {
+      console.log(acc);
+      return {
+        ...acc,
+        [currCard.value]: acc[currCard.value] ? acc[currCard.value] + 1 : 1,
+      };
+    }, {});
     setHand(handObj);
   }, [cards.length]);
 
