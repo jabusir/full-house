@@ -33,14 +33,25 @@ function App() {
 
   useEffect(() => {
     if (cardCount === 0 && deck !== "") {
-      fetchCards(deck, 5).then((res) => {
-        if (res.success) {
-          setCards(res.cards);
-          setCardCount(5);
-        }
-      });
+      drawCards();
     }
   }, [deck]);
+
+  useEffect(() => {
+    if (cards.length === 0 && deck !== "") {
+      drawCards();
+    }
+
+    let handObj = {};
+    cards.forEach((card) => {
+      let timesSeen = handObj[card.value];
+      if (timesSeen) {
+        handObj[card.value] = timesSeen + 1;
+      }
+      handObj[card.value] = 1;
+    });
+    setHand(handObj);
+  }, [cards.length]);
 
   useEffect(() => {
     let threeOfAKind = false;
@@ -58,18 +69,38 @@ function App() {
     }
   }, [hand]);
 
-  const handleAddCards = () => {};
+  const drawCards = (amount = 5) => {
+    fetchCards(deck, amount).then((res) => {
+      if (res.success) {
+        setCards(cards.concat(res.cards));
+        setCardCount(5);
+      }
+    });
+  };
+
+  const addCards = () => {
+    if (cardCount < 5) {
+      drawCards(5 - cardCount);
+    }
+  };
+
+  const deleteCard = (code) => {
+    setPile(pile.concat(cards.filter((card) => card.code === code)));
+    setCards(cards.filter((card) => card.code !== code));
+    setCardCount(cardCount - 1);
+  };
 
   return (
     <div style={{ height: "100vh", width: "100%" }}>
-      <Deck onClick={handleAddCards} />
-      <CardsContainer>
-        {cards.map((card, i) => (
-          <Card key={i} data={card} />
-        ))}
-      </CardsContainer>
+      <Deck addCards={addCards} />
+      {!fullHouse && (
+        <CardsContainer>
+          {cards.map((card, i) => (
+            <Card key={i} deleteCard={deleteCard} data={card} />
+          ))}
+        </CardsContainer>
+      )}
     </div>
   );
 }
-
 export default App;
