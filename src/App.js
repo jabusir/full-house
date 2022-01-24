@@ -100,7 +100,6 @@ function App() {
   };
 
   const drawCards = (amount = 5) => {
-<<<<<<< HEAD
     if (!fullHouse && !gameLoss) {
       fetchCards(deck, amount).then((res) => {
         if (res.success) {
@@ -111,16 +110,6 @@ function App() {
         }
       });
     }
-=======
-    fetchCards(deck, amount).then((res) => {
-      if (res.success) {
-        setCards(cards.concat(res.cards));
-      }
-      if (res.remaining === 0) {
-        setGameLoss(true);
-      }
-    });
->>>>>>> fc6dda6aac233777f02a359efa0544d5ed326ad0
   };
 
   const addCards = () => {
