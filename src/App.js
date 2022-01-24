@@ -44,7 +44,6 @@ const FullHouseImg = styled.img`
 
 function App() {
   const [deck, setDeck] = useState("");
-  const [cardCount, setCardCount] = useState(0);
   const [cards, setCards] = useState([]);
   const [hand, setHand] = useState({});
   const [fullHouse, setFullHouse] = useState(false);
@@ -57,7 +56,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (cardCount === 0 && deck !== "") {
+    if (cards.length === 0 && deck !== "") {
       drawCards();
     }
   }, [deck]);
@@ -101,33 +100,35 @@ function App() {
   };
 
   const drawCards = (amount = 5) => {
-    fetchCards(deck, amount).then((res) => {
-      if (res.success) {
-        setCards(cards.concat(res.cards));
-        setCardCount(5);
-      }
-      if (res.remaining === 0) {
-        setGameLoss(true);
-      }
-    });
+    if (!fullHouse && !gameLoss) {
+      fetchCards(deck, amount).then((res) => {
+        if (res.success) {
+          setCards(cards.concat(res.cards));
+        }
+        if (res.remaining === 0) {
+          setGameLoss(true);
+        }
+      });
+    }
   };
 
   const addCards = () => {
-    if (cardCount < 5) {
-      drawCards(5 - cardCount);
+    if (cards.length < 5) {
+      drawCards(5 - cards.length);
     }
   };
 
   const deleteCard = (code) => {
-    setCards(cards.filter((card) => card.code !== code));
-    setCardCount(cardCount - 1);
+    if (!fullHouse) {
+      setCards(cards.filter((card) => card.code !== code));
+    }
   };
 
   const resetGame = () => {
     setFullHouse(false);
     setGameLoss(false);
-    setCardCount(0);
     setHand({});
+    setCards([]);
     getDeck();
   };
 
@@ -146,7 +147,7 @@ function App() {
           />
         ))}
       </CardsContainer>
-      {gameLoss && (
+      {(gameLoss || fullHouse) && (
         <ButtonContainer>
           <Button onClick={resetGame}>Run it Back</Button>
         </ButtonContainer>
