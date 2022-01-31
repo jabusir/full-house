@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/full-house/static/css/main.2899bec1.css",
-    "main.js": "/full-house/static/js/main.a5167ccc.js",
+    "main.js": "/full-house/static/js/main.e2aeab6e.js",
     "static/js/787.0a2da1e0.chunk.js": "/full-house/static/js/787.0a2da1e0.chunk.js",
     "index.html": "/full-house/index.html",
     "main.2899bec1.css.map": "/full-house/static/css/main.2899bec1.css.map",
-    "main.a5167ccc.js.map": "/full-house/static/js/main.a5167ccc.js.map",
+    "main.e2aeab6e.js.map": "/full-house/static/js/main.e2aeab6e.js.map",
     "787.0a2da1e0.chunk.js.map": "/full-house/static/js/787.0a2da1e0.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.2899bec1.css",
-    "static/js/main.a5167ccc.js"
+    "static/js/main.e2aeab6e.js"
   ]
 }
